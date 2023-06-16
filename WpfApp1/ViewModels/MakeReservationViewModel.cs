@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using WpfApp1.Commands;
 using WpfApp1.Models;
+using WpfApp1.Stores;
 
 namespace WpfApp1.ViewModels
 {
@@ -76,10 +77,10 @@ namespace WpfApp1.ViewModels
 
         public ICommand? CancelCommand { get; }
 
-        public  MakeReservationViewModel(Hotel hotel)
+        public  MakeReservationViewModel(Hotel hotel, NavigationStore navigationStore, Func<ReservationListingViewModel> createReservationViewModel)
         {
             SubmitCommand = new MakeReservationCommand(this,hotel);
-            CancelCommand = new CancelMakeReservationCommand();
+            CancelCommand = new NavigateCommand(navigationStore, createReservationViewModel);
         }
     }
 }
