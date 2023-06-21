@@ -2,6 +2,7 @@
 using System.Windows;
 using WpfApp1.Exceptions;
 using WpfApp1.Models;
+using WpfApp1.Services;
 using WpfApp1.ViewModels;
 
 namespace WpfApp1.Commands
@@ -10,12 +11,15 @@ namespace WpfApp1.Commands
     {
         private readonly MakeReservationViewModel _makeReservationViewModel;
         private readonly Hotel _hotel;
+        private readonly NavigationService _reservationViewNavigationService;
 
-        public MakeReservationCommand(MakeReservationViewModel makeReservationViewModel, Hotel hotel)
+        public MakeReservationCommand(MakeReservationViewModel makeReservationViewModel, 
+            Hotel hotel, NavigationService reservationViewNavigationService)
         {
             _makeReservationViewModel = makeReservationViewModel;
             _hotel = hotel;
-
+            _reservationViewNavigationService = reservationViewNavigationService;
+            
             _makeReservationViewModel.PropertyChanged += OnViewModelPropertyChanged;
         }
 
@@ -47,8 +51,11 @@ namespace WpfApp1.Commands
             {
                 _hotel.MakeReservation(reservation);
 
-                MessageBox.Show("Successfully reserved room", "Error",
+                MessageBox.Show("Successfully reserved room", "Success",
                     MessageBoxButton.OK, MessageBoxImage.Information);
+
+                _reservationViewNavigationService.Navigate();
+
             }
             catch (ReservationConflictException)
             {

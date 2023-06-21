@@ -1,4 +1,5 @@
 ﻿using System;
+using WpfApp1.Services;
 using WpfApp1.Stores;
 using WpfApp1.ViewModels;
 
@@ -7,18 +8,16 @@ namespace WpfApp1.Commands
     internal class NavigateCommand : CommandBase
     {
 
-        private readonly NavigationStore _navigationStore;
-        private readonly Func<ViewModelBase> _createVieModel;
+        private readonly NavigationService _navigationService;
 
-        public NavigateCommand(NavigationStore navigationStore, Func<ViewModelBase> createVieModel)
+        public NavigateCommand(NavigationService navigationService)
         {
-            _navigationStore = navigationStore;
-            _createVieModel = createVieModel;
+            _navigationService = navigationService;
         }
 
         public override void Execute(object? parameter)
         {
-            _navigationStore.CurrentViewModel = _createVieModel();                
+            _navigationService.Navigate();
         }
     }
 }
