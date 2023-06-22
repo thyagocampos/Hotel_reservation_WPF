@@ -3,6 +3,9 @@ using System.Windows;
 using WpfApp1.DbContexts;
 using WpfApp1.Models;
 using WpfApp1.Services;
+using WpfApp1.Services.ReservationConflictValidation;
+using WpfApp1.Services.ReservationCreator;
+using WpfApp1.Services.ReservationProvider;
 using WpfApp1.Stores;
 using WpfApp1.ViewModels;
 
@@ -17,21 +20,29 @@ namespace WpfApp1
         private readonly Hotel _hotel;
         private readonly NavigationStore _navigationStore;
         private const string CONNECTION_STRING = "Data Source=reservoom.db";
+        private ReservroomDbContextFactory _reservroomDbContextFactory;
         public App()
         {
-            _hotel = new Hotel("Thyago's Suites");
+             _reservroomDbContextFactory = new ReservroomDbContextFactory(CONNECTION_STRING);
+
+            IReservationProvider reservationProvider = new DatabaseReservationProvider(_reservroomDbContextFactory);
+            IReservationCreator reservatonCreator = new DatabaseReservationCreator(_reservroomDbContextFactory);
+            IReservationConflictValidator reservationConflictValidator = new DatabaseReservationConflictValidator(_reservroomDbContextFactory);
+            
+            ReservationBook reservationBook = new ReservationBook(reservationProvider, reservatonCreator, reservationConflictValidator);
+
+            _hotel = new Hotel("Thyago's Suites", reservationBook);
             _navigationStore = new NavigationStore();
         }
 
         protected override void OnStartup(StartupEventArgs e)
-        {
+        {                        
+            using (ReservRoomDbContext dbContext = _reservroomDbContextFactory.CreateDbContext())
+            {
+                dbContext.Database.Migrate();
+            }
+
             _navigationStore.CurrentViewModel = CreateReservationViewModel();
-
-            DbContextOptions options = new DbContextOptionsBuilder().UseSqlite(CONNECTION_STRING).Options;
-
-            ReservRoomDbContext dbContext = new ReservRoomDbContext(options);
-
-            dbContext.Database.Migrate();
 
             MainWindow = new MainWindow()
             {
@@ -50,7 +61,7 @@ namespace WpfApp1
         
         private ReservationListingViewModel CreateReservationViewModel()
         {
-            return new ReservationListingViewModel(_hotel, new NavigationService(_navigationStore, CreateMakeReservationViewModel));
+            return ReservationListingViewModel.LoadViewModel(_hotel, new NavigationService(_navigationStore, CreateMakeReservationViewModel));
         }
     }
 }

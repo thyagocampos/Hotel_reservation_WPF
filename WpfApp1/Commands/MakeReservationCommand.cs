@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows;
 using WpfApp1.Exceptions;
 using WpfApp1.Models;
@@ -7,7 +9,7 @@ using WpfApp1.ViewModels;
 
 namespace WpfApp1.Commands
 {
-    internal class MakeReservationCommand : CommandBase
+    internal class MakeReservationCommand : AsyncCommandBase
     {
         private readonly MakeReservationViewModel _makeReservationViewModel;
         private readonly Hotel _hotel;
@@ -39,7 +41,7 @@ namespace WpfApp1.Commands
                 base.CanExecute(parameter);
         }
 
-        public override void Execute(object? parameter)
+        public override async Task ExecuteAsync(object? parameter)
         {
             Reservation reservation = new Reservation(
                 new RoomID(int.Parse(_makeReservationViewModel.FloorNumber), int.Parse(_makeReservationViewModel.RoomNumber.ToString())),
@@ -49,7 +51,7 @@ namespace WpfApp1.Commands
 
             try
             {
-                _hotel.MakeReservation(reservation);
+                await _hotel.MakeReservation(reservation);
 
                 MessageBox.Show("Successfully reserved room", "Success",
                     MessageBoxButton.OK, MessageBoxImage.Information);
@@ -61,7 +63,12 @@ namespace WpfApp1.Commands
             {
                 MessageBox.Show("This room is already taken", "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
-            }                        
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Failed to make reservation", "Error",
+                 MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

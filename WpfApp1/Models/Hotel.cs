@@ -12,20 +12,19 @@ namespace WpfApp1.Models
 
         public string Name { get; set; }
 
-        public Hotel(string name)
+        public Hotel(string name, ReservationBook reservationBook)
         {
             Name = name;
-
-            _reservationBook = new ReservationBook();
+            _reservationBook = reservationBook;
         }
 
         /// <summary>
         /// Get all reservations
         /// </summary>
         /// <returns>All reservations in reservation book.</returns>
-        public IEnumerable<Reservation> GetAllReservations()
+        public async Task<IEnumerable<Reservation>> GetAllReservations()
         {
-            return _reservationBook.GetAllReservations();
+            return await _reservationBook.GetAllReservations();
         }
 
         /// <summary>
@@ -33,9 +32,9 @@ namespace WpfApp1.Models
         /// </summary>
         /// <param name="reservation">Receives a reservation and add it to reservation book.</param>
 
-        public void MakeReservation(Reservation reservation)
+        public async Task MakeReservation(Reservation reservation)
         {
-            _reservationBook.AddReservation(reservation);
+            await _reservationBook.AddReservation(reservation);
         }
     }
 }

@@ -1,39 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using WpfApp1.Commands;
 using WpfApp1.Models;
 using WpfApp1.Services;
-using WpfApp1.Stores;
 
 namespace WpfApp1.ViewModels
 {
     public class ReservationListingViewModel : ViewModelBase
-    {
-        private readonly Hotel _hotel;
+    {        
         private readonly ObservableCollection<ReservationViewModel> _reservations;
+        
+        public ICommand LoadReservationsCommand { get; }
+        
         public ICommand? MakeReservationCommmand { get; }
 
         public IEnumerable<ReservationViewModel> Reservations => _reservations;
 
         public ReservationListingViewModel(Hotel hotel, NavigationService makeReservationNavigationService)
-        {
-
-            _hotel = hotel; 
-            
+        {                       
             _reservations = new ObservableCollection<ReservationViewModel>();
 
-            MakeReservationCommmand = new NavigateCommand(makeReservationNavigationService);
-
-            UpdateReservations();
+            LoadReservationsCommand = new LoadReservationCommand(hotel, this);
+            MakeReservationCommmand = new NavigateCommand(makeReservationNavigationService);            
         }
 
-        private void UpdateReservations()
+        public static ReservationListingViewModel LoadViewModel(Hotel hotel, NavigationService makeReservationNavigationService)
+        {
+            ReservationListingViewModel viewModel = new ReservationListingViewModel(hotel, makeReservationNavigationService);
+
+            viewModel.LoadReservationsCommand.Execute(null);
+             
+            return viewModel;
+        }
+
+        public void UpdateReservations(IEnumerable<Reservation> reservations)
         {
             _reservations.Clear();
 
-            foreach(Reservation reservation in _hotel.GetAllReservations())
+            foreach(Reservation reservation in reservations)
             {
                 ReservationViewModel reservationViewModel = new ReservationViewModel(reservation);
                 _reservations.Add(reservationViewModel);

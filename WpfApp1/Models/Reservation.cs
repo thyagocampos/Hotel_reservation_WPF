@@ -21,17 +21,6 @@ namespace WpfApp1.Models
             EndTime = endTime;
             UserName = userName;
         }
-
-        internal bool Conflicts(Reservation reservation)
-        {
-            if (reservation.RoomID != RoomID)
-            {
-                return false;
-            }
-
-            return reservation.StartTime < EndTime && reservation.EndTime > StartTime;
-        }
-
    
     }
 }
