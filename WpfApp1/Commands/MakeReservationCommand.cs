@@ -53,7 +53,7 @@ namespace WpfApp1.Commands
             try
             {
 
-                _hotelStore.MakeReservation(reservation);
+                await _hotelStore.MakeReservation(reservation);
 
                 MessageBox.Show("Successfully reserved room", "Success",
                     MessageBoxButton.OK, MessageBoxImage.Information);

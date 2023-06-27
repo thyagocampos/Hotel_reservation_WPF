@@ -10,6 +10,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -72,6 +73,6 @@
                 </GridView>
             </ListView.View>
         </ListView>
-
+  
     </Grid>
 </UserControl>
