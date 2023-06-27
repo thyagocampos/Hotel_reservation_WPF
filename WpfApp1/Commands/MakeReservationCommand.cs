@@ -5,6 +5,7 @@ using System.Windows;
 using WpfApp1.Exceptions;
 using WpfApp1.Models;
 using WpfApp1.Services;
+using WpfApp1.Stores;
 using WpfApp1.ViewModels;
 
 namespace WpfApp1.Commands
@@ -12,14 +13,14 @@ namespace WpfApp1.Commands
     internal class MakeReservationCommand : AsyncCommandBase
     {
         private readonly MakeReservationViewModel _makeReservationViewModel;
-        private readonly Hotel _hotel;
+        private readonly HotelStore _hotelStore;
         private readonly NavigationService _reservationViewNavigationService;
 
         public MakeReservationCommand(MakeReservationViewModel makeReservationViewModel, 
-            Hotel hotel, NavigationService reservationViewNavigationService)
+            HotelStore hotelStore, NavigationService reservationViewNavigationService)
         {
             _makeReservationViewModel = makeReservationViewModel;
-            _hotel = hotel;
+            _hotelStore = hotelStore;
             _reservationViewNavigationService = reservationViewNavigationService;
             
             _makeReservationViewModel.PropertyChanged += OnViewModelPropertyChanged;
@@ -51,7 +52,8 @@ namespace WpfApp1.Commands
 
             try
             {
-                await _hotel.MakeReservation(reservation);
+
+                _hotelStore.MakeReservation(reservation);
 
                 MessageBox.Show("Successfully reserved room", "Success",
                     MessageBoxButton.OK, MessageBoxImage.Information);

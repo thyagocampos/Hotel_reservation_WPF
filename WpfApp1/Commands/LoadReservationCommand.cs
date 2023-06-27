@@ -5,18 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using WpfApp1.Models;
+using WpfApp1.Stores;
 using WpfApp1.ViewModels;
 
 namespace WpfApp1.Commands
 {
     public class LoadReservationCommand : AsyncCommandBase
     {
-        private readonly Hotel _hotel;
+        private readonly HotelStore _hotelStore;
         private readonly ReservationListingViewModel _viewModel;
 
-        public LoadReservationCommand(Hotel hotel, ReservationListingViewModel viewModel)
+        public LoadReservationCommand(HotelStore hotelStore, ReservationListingViewModel viewModel)
         {
-            _hotel = hotel;
+            _hotelStore = hotelStore;
             _viewModel = viewModel;
         }
 
@@ -24,9 +25,9 @@ namespace WpfApp1.Commands
         {
             try
             {
-                IEnumerable<Reservation> reservations = await _hotel.GetAllReservations();
+                await _hotelStore.Load();
 
-                _viewModel.UpdateReservations(reservations);
+                _viewModel.UpdateReservations(_hotelStore.Reservations);
             }
             catch (Exception)
             {

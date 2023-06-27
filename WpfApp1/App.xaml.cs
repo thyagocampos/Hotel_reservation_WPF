@@ -16,10 +16,12 @@ namespace WpfApp1
     /// </summary>
     public partial class App : Application
     {
+        private const string CONNECTION_STRING = "Data Source=reservoom.db";
 
         private readonly Hotel _hotel;
+        private readonly HotelStore _hotelStore;
         private readonly NavigationStore _navigationStore;
-        private const string CONNECTION_STRING = "Data Source=reservoom.db";
+        
         private ReservroomDbContextFactory _reservroomDbContextFactory;
         public App()
         {
@@ -32,6 +34,7 @@ namespace WpfApp1
             ReservationBook reservationBook = new ReservationBook(reservationProvider, reservatonCreator, reservationConflictValidator);
 
             _hotel = new Hotel("Thyago's Suites", reservationBook);
+            _hotelStore = new HotelStore(_hotel);
             _navigationStore = new NavigationStore();
         }
 
@@ -56,12 +59,12 @@ namespace WpfApp1
 
         private MakeReservationViewModel CreateMakeReservationViewModel()
         {
-            return new MakeReservationViewModel(_hotel, new NavigationService(_navigationStore, CreateReservationViewModel));
+            return new MakeReservationViewModel(_hotelStore, new NavigationService(_navigationStore, CreateReservationViewModel));
         }
         
         private ReservationListingViewModel CreateReservationViewModel()
         {
-            return ReservationListingViewModel.LoadViewModel(_hotel, new NavigationService(_navigationStore, CreateMakeReservationViewModel));
+            return ReservationListingViewModel.LoadViewModel(_hotelStore, new NavigationService(_navigationStore, CreateMakeReservationViewModel));
         }
     }
 }
