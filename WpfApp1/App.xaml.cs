@@ -28,10 +28,10 @@ namespace WpfApp1
              _reservroomDbContextFactory = new ReservroomDbContextFactory(CONNECTION_STRING);
 
             IReservationProvider reservationProvider = new DatabaseReservationProvider(_reservroomDbContextFactory);
-            IReservationCreator reservatonCreator = new DatabaseReservationCreator(_reservroomDbContextFactory);
+            IReservationCreator reservationCreator = new DatabaseReservationCreator(_reservroomDbContextFactory);
             IReservationConflictValidator reservationConflictValidator = new DatabaseReservationConflictValidator(_reservroomDbContextFactory);
             
-            ReservationBook reservationBook = new ReservationBook(reservationProvider, reservatonCreator, reservationConflictValidator);
+            ReservationBook reservationBook = new ReservationBook(reservationProvider, reservationCreator, reservationConflictValidator);
 
             _hotel = new Hotel("Thyago's Suites", reservationBook);
             _hotelStore = new HotelStore(_hotel);

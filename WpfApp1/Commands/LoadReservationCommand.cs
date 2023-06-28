@@ -23,6 +23,8 @@ namespace WpfApp1.Commands
 
         public override async Task ExecuteAsync(object parameter)
         {
+            _viewModel.IsLoading = true;
+
             try
             {
                 await _hotelStore.Load();
@@ -33,7 +35,9 @@ namespace WpfApp1.Commands
             {
                 MessageBox.Show("Failed to load reservation", "Error",
                  MessageBoxButton.OK, MessageBoxImage.Error);
-            }            
+            }
+
+            _viewModel.IsLoading = false;
         }
     }
 }

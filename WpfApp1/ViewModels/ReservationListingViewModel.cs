@@ -20,7 +20,23 @@ namespace WpfApp1.ViewModels
         public ICommand? MakeReservationCommmand { get; }
 
         public IEnumerable<ReservationViewModel> Reservations => _reservations;
-        
+
+        private bool _isLoading { get; set; }
+
+        public bool IsLoading
+        {
+            get
+            {
+                return _isLoading;
+            }
+
+            set
+            {
+                _isLoading = value;
+                OnPropertyChanged(nameof(IsLoading));
+            }
+        }
+
 
         public ReservationListingViewModel(HotelStore hotelStore,  NavigationService makeReservationNavigationService)
         {
