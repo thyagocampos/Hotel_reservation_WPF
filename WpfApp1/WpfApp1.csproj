@@ -5,7 +5,12 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Resources\hotel.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\hotel.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="LoadingSpinner.WPF" Version="1.0.0" />
