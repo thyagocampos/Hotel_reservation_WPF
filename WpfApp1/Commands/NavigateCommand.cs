@@ -5,12 +5,12 @@ using WpfApp1.ViewModels;
 
 namespace WpfApp1.Commands
 {
-    internal class NavigateCommand : CommandBase
+    internal class NavigateCommand<TViewModel> : CommandBase where TViewModel : ViewModelBase
     {
 
-        private readonly NavigationService _navigationService;
+        private readonly NavigationService<TViewModel> _navigationService;
 
-        public NavigateCommand(NavigationService navigationService)
+        public NavigateCommand(NavigationService<TViewModel> navigationService)
         {
             _navigationService = navigationService;
         }

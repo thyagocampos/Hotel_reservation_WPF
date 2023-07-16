@@ -8,13 +8,13 @@ using WpfApp1.ViewModels;
 
 namespace WpfApp1.Services
 {
-    public class NavigationService
+    public class NavigationService<TViewModel> where TViewModel : ViewModelBase
     {
 
         private readonly NavigationStore _navigationStore;
-        private readonly Func<ViewModelBase> _createVieModel;
+        private readonly Func<TViewModel> _createVieModel;
 
-        public NavigationService(NavigationStore navigationStore, Func<ViewModelBase> createVieModel)
+        public NavigationService(NavigationStore navigationStore, Func<TViewModel> createVieModel)
         {
             _navigationStore = navigationStore;
             _createVieModel = createVieModel;
